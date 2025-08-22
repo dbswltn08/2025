@@ -5,7 +5,7 @@ st.set_page_config(page_title="K-POP 댄스 퀴즈🎶", page_icon="💃")
 st.title("💃🕺 K-POP 댄스 퀴즈 앱 🎶")
 st.write("춤 설명만 보고 어떤 K-POP 안무인지 맞혀보세요!")
 
-# 문제 데이터 (정답을 리스트로 저장: 영어 제목 + 한국어 발음)
+# 문제 데이터
 questions = [
     {
         "desc": "양손을 얼굴 옆에 두고 고양이처럼 귀여운 포즈를 취하는 포인트 안무.",
@@ -53,7 +53,7 @@ questions = [
         "artist": "LISA"
     },
     {
-        "desc": "고개를 크게 까닥이며 추는 '머리 까딱 춤'이 포인트.",
+        "desc": "고개를 크게 까닥하며 추는 '머리 까딱 춤'이 포인트.",
         "answers": ["idol", "아이돌"],
         "artist": "BTS"
     },
@@ -108,16 +108,16 @@ if st.button("제출"):
     correct = any(user_norm == normalize(ans) for ans in q["answers"])
 
     if correct:
-        st.success("정답입니다! 🎉")
+        st.success(f"✅ 정답입니다! 정답은 {', '.join(q['answers'])} 입니다.")
         st.session_state.score += 1
     else:
-        st.error(f"땡! 정답은 {', '.join(q['answers'])} 입니다.")
+        st.error(f"❌ 오답! 정답은 {', '.join(q['answers'])} 입니다.")
 
     # 다음 문제로 즉시 이동
     if st.session_state.q_idx < len(questions) - 1:
         st.session_state.q_idx += 1
         st.session_state.show_hint = False
-        st.rerun()  # 최신 Streamlit에서는 st.rerun() 사용
+        st.rerun()
     else:
         st.balloons()
         st.write(f"🎊 퀴즈 완료! 최종 점수: {st.session_state.score}/{len(questions)}")
