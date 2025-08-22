@@ -3,22 +3,22 @@ import streamlit as st
 st.set_page_config(page_title="K-POP 댄스 퀴즈🎶", page_icon="💃")
 
 st.title("💃🕺 K-POP 댄스 퀴즈 앱 🎶")
-st.write("텍스트 설명만 보고 어떤 K-POP 안무인지 맞혀보세요!")
+st.write("춤 설명만 보고 어떤 K-POP 안무인지 맞혀보세요!")
 
-# 문제 데이터
+# 문제 데이터 (가수 이름은 desc에 없음)
 questions = [
     {
-        "desc": "양손을 얼굴 옆에 두고 고양이처럼 귀여운 포즈를 취하는 포인트 안무. 트와이스의 대표곡!",
+        "desc": "양손을 얼굴 옆에 두고 고양이처럼 귀여운 포즈를 취하는 포인트 안무.",
         "answer": "Cheer Up",
         "artist": "TWICE"
     },
     {
-        "desc": "손가락으로 총을 만드는 동작이 유명한 안무. 블랙핑크의 히트곡!",
+        "desc": "손가락으로 총을 만드는 동작이 유명한 안무.",
         "answer": "DDU-DU DDU-DU",
         "artist": "BLACKPINK"
     },
     {
-        "desc": "말춤이라고 불리는 세계적으로 유명한 댄스. 싸이의 곡!",
+        "desc": "말춤이라고 불리는 세계적으로 유명한 댄스.",
         "answer": "Gangnam Style",
         "artist": "PSY"
     }
@@ -56,7 +56,7 @@ if st.button("제출"):
     # 다음 문제 준비
     if st.session_state.q_idx < len(questions) - 1:
         st.session_state.q_idx += 1
-        st.session_state.show_hint = False  # 다음 문제에서는 힌트 초기화
+        st.session_state.show_hint = False  # 다음 문제에서 힌트 초기화
     else:
         st.balloons()
         st.write(f"🎊 퀴즈 완료! 최종 점수: {st.session_state.score}/{len(questions)}")
