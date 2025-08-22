@@ -67,7 +67,7 @@ if st.button("제출"):
     if st.session_state.q_idx < len(questions) - 1:
         st.session_state.q_idx += 1
         st.session_state.show_hint = False
-        st.experimental_rerun()
+        st.rerun()  # ✅ 최신 Streamlit에서는 이렇게 사용
     else:
         st.balloons()
         st.write(f"🎊 퀴즈 완료! 최종 점수: {st.session_state.score}/{len(questions)}")
