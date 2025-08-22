@@ -5,7 +5,7 @@ st.set_page_config(page_title="K-POP 댄스 퀴즈🎶", page_icon="💃")
 st.title("💃🕺 K-POP 댄스 퀴즈 앱 🎶")
 st.write("춤 설명만 보고 어떤 K-POP 안무인지 맞혀보세요!")
 
-# 문제 데이터 (정답을 리스트로 저장: 원래 제목 + 발음)
+# 문제 데이터 (정답을 리스트로 저장: 원래 제목 + 한국어 발음)
 questions = [
     {
         "desc": "양손을 얼굴 옆에 두고 고양이처럼 귀여운 포즈를 취하는 포인트 안무.",
@@ -19,3 +19,39 @@ questions = [
     },
     {
         "desc": "말춤이라고 불리는 세계적으로 유명한 댄스.",
+        "answers": ["gangnam style", "강남스타일"],
+        "artist": "PSY"
+    }
+]
+
+# 세션 상태 초기화
+if "q_idx" not in st.session_state:
+    st.session_state.q_idx = 0
+if "score" not in st.session_state:
+    st.session_state.score = 0
+if "show_hint" not in st.session_state:
+    st.session_state.show_hint = False
+
+def normalize(text: str) -> str:
+    """소문자 + 공백 제거"""
+    return text.strip().lower().replace(" ", "")
+
+# 현재 문제 불러오기
+q = questions[st.session_state.q_idx]
+
+st.subheader(f"문제 {st.session_state.q_idx + 1}")
+st.write(q["desc"])
+
+# 힌트 버튼
+if st.button("힌트 보기 🕵️"):
+    st.session_state.show_hint = True
+
+if st.session_state.show_hint:
+    st.info(f"👉 가수 힌트: **{q['artist']}**")
+
+# 사용자 입력
+user_answer = st.text_input("정답을 입력하세요:", key=f"answer_{st.session_state.q_idx}")
+
+# 제출 버튼
+if st.button("제출"):
+    user_norm =_
