@@ -54,4 +54,20 @@ user_answer = st.text_input("정답을 입력하세요:", key=f"answer_{st.sessi
 
 # 제출 버튼
 if st.button("제출"):
-    user_norm =_
+    user_norm = normalize(user_answer)
+    correct = any(user_norm == normalize(ans) for ans in q["answers"])
+
+    if correct:
+        st.success("정답입니다! 🎉")
+        st.session_state.score += 1
+    else:
+        st.error(f"땡! 정답은 {', '.join(q['answers'])} 입니다.")
+
+    # 다음 문제로 즉시 이동
+    if st.session_state.q_idx < len(questions) - 1:
+        st.session_state.q_idx += 1
+        st.session_state.show_hint = False
+        st.experimental_rerun()
+    else:
+        st.balloons()
+        st.write(f"🎊 퀴즈 완료! 최종 점수: {st.session_state.score}/{len(questions)}")
