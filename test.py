@@ -1,123 +1,147 @@
 import streamlit as st
+import random
 
-st.set_page_config(page_title="K-POP 댄스 퀴즈🎶", page_icon="💃")
-
-st.title("💃🕺 K-POP 댄스 퀴즈 앱 🎶")
-st.write("춤 설명만 보고 어떤 K-POP 안무인지 맞혀보세요!")
-
-# 문제 데이터
-questions = [
+# -----------------------------
+# 1. 문제 데이터 (설명 + 정답 + 가수 + 유튜브 링크)
+# -----------------------------
+quiz_data = [
     {
-        "desc": "양손을 얼굴 옆에 두고 고양이처럼 귀여운 포즈를 취하는 포인트 안무.",
-        "answers": ["cheer up", "치어럽"],
-        "artist": "TWICE"
+        "question": "한쪽 팔을 위로 들고 다른 손은 허리에 두며, 말 타는 듯 위아래로 뛰는 춤.",
+        "answer": "강남스타일",
+        "artist": "싸이",
+        "youtube_url": "https://www.youtube.com/watch?v=9bZkp7q19f0"
     },
     {
-        "desc": "손가락으로 총을 만드는 동작이 유명한 안무.",
-        "answers": ["ddu-du ddu-du", "뚜두뚜두"],
-        "artist": "BLACKPINK"
+        "question": "후렴에서 점프하며 양손을 위로 힘차게 뻗는 파워풀한 동작.",
+        "answer": "불타오르네",
+        "artist": "BTS",
+        "youtube_url": "https://www.youtube.com/watch?v=ALj5MKjy2BU"
     },
     {
-        "desc": "말춤이라고 불리는 세계적으로 유명한 댄스.",
-        "answers": ["gangnam style", "강남스타일"],
-        "artist": "PSY"
+        "question": "후렴에서 손가락으로 총 모양을 만들고 쏘는 듯한 포즈.",
+        "answer": "뚜두뚜두",
+        "artist": "BLACKPINK",
+        "youtube_url": "https://www.youtube.com/watch?v=IHNzOHi8sJs"
     },
     {
-        "desc": "손으로 하트를 그리며 '사랑해'를 표현하는 안무.",
-        "answers": ["boy with luv", "작은 것들을 위한 시", "보이윗럽"],
-        "artist": "BTS"
+        "question": "후렴에서 양팔을 벌리고 몸을 좌우로 흔드는 국민 댄스.",
+        "answer": "사랑을 했다",
+        "artist": "iKON",
+        "youtube_url": "https://www.youtube.com/watch?v=vecSVX1QYbQ"
     },
     {
-        "desc": "양손을 번쩍 들고 허리를 흔드는 '꿀벌춤'이 포인트인 곡.",
-        "answers": ["gee", "지"],
-        "artist": "Girls' Generation"
+        "question": "양손으로 얼굴 옆에 눈물 모양을 만들며 우는 듯한 포즈.",
+        "answer": "TT",
+        "artist": "TWICE",
+        "youtube_url": "https://www.youtube.com/watch?v=ePpPVE-GGJw"
     },
     {
-        "desc": "어깨를 과장되게 으쓱하며 추는 '어깨춤'이 유명한 곡.",
-        "answers": ["savage love", "새비지러브"],
-        "artist": "Jawsh 685, Jason Derulo, BTS"
+        "question": "허리에 손을 두고 권총을 쏘는 듯한 관능적인 포즈.",
+        "answer": "러브샷",
+        "artist": "EXO",
+        "youtube_url": "https://www.youtube.com/watch?v=pSudEWBAYRE"
     },
     {
-        "desc": "손바닥을 마주치며 '꽝'하는 듯한 동작이 포인트.",
-        "answers": ["bang bang bang", "뱅뱅뱅"],
-        "artist": "BIGBANG"
+        "question": "무대 시작에 의자를 이용하다가 후렴에서 두 팔을 크게 벌리고 위로 뻗는 동작.",
+        "answer": "에너제틱",
+        "artist": "Wanna One",
+        "youtube_url": "https://www.youtube.com/watch?v=RkZkekS8NQU"
     },
     {
-        "desc": "손으로 얼굴을 가리면서 고개를 숙이는 '포인트 포즈'가 인상적인 곡.",
-        "answers": ["love shot", "러브샷"],
-        "artist": "EXO"
+        "question": "후렴에서 한쪽 손으로 얼굴을 가리고 눈만 살짝 드러내는 매혹적인 춤.",
+        "answer": "피 땀 눈물",
+        "artist": "BTS",
+        "youtube_url": "https://www.youtube.com/watch?v=hmE9f-TEutc"
     },
     {
-        "desc": "양손을 펴서 흔드는 동작으로 '돈을 세는' 듯한 제스처가 유명.",
-        "answers": ["money", "머니"],
-        "artist": "LISA"
+        "question": "후렴에서 손가락을 권총 모양으로 만들어 'Bang!' 하는 듯한 포즈.",
+        "answer": "킬디스러브",
+        "artist": "BLACKPINK",
+        "youtube_url": "https://www.youtube.com/watch?v=2S24-y0Ij3Y"
     },
     {
-        "desc": "고개를 크게 까닥하며 추는 '머리 까딱 춤'이 포인트.",
-        "answers": ["idol", "아이돌"],
-        "artist": "BTS"
+        "question": "양손을 머리 위로 올려 고양이 귀 모양을 만들고 흔드는 귀여운 춤.",
+        "answer": "살짝 설렜어",
+        "artist": "오마이걸",
+        "youtube_url": "https://www.youtube.com/watch?v=1WJhnjxkLNk"
     },
     {
-        "desc": "한쪽 발을 앞으로 차며 허리를 숙이는 '칼군무'가 압도적인 곡.",
-        "answers": ["sherlock", "셜록"],
-        "artist": "SHINee"
+        "question": "후렴에서 양팔을 크게 돌리며 중독적인 리듬에 맞춰 추는 헬리콥터 춤.",
+        "answer": "링딩동",
+        "artist": "샤이니",
+        "youtube_url": "https://www.youtube.com/watch?v=roughtzsCDI"
     },
     {
-        "desc": "손가락으로 작은 하트를 만들며 따라하는 사람들이 많았던 곡.",
-        "answers": ["tt", "티티"],
-        "artist": "TWICE"
+        "question": "후렴에서 양손을 얼굴 옆으로 올리고 위아래로 흔드는 귀여운 춤.",
+        "answer": "너무너무너무",
+        "artist": "아이오아이",
+        "youtube_url": "https://www.youtube.com/watch?v=Q3J3qH2K_Gw"
     },
     {
-        "desc": "양손을 올려 왕관 모양을 만드는 안무가 포인트.",
-        "answers": ["lion", "라이언"],
-        "artist": "(G)I-DLE"
+        "question": "후렴 시작 부분에서 손가락을 입술에 대고 '쉿' 포즈를 하는 안무.",
+        "answer": "러시안룰렛",
+        "artist": "레드벨벳",
+        "youtube_url": "https://www.youtube.com/watch?v=uR8Mrt1IpXg"
+    },
+    {
+        "question": "후렴에서 양팔을 강하게 휘두르며 강렬한 에너지를 뿜어내는 춤.",
+        "answer": "체리밤",
+        "artist": "NCT 127",
+        "youtube_url": "https://www.youtube.com/watch?v=WkuHLzMMTZM"
+    },
+    {
+        "question": "후렴에서 손가락으로 총 모양을 만들고 발랄하게 쏘는 듯한 포즈.",
+        "answer": "피카부",
+        "artist": "레드벨벳",
+        "youtube_url": "https://www.youtube.com/watch?v=J_CFBjAyPWE"
     }
 ]
 
+# -----------------------------
+# 2. Streamlit 앱 구조
+# -----------------------------
+st.title("💃🕺 K-POP 댄스 퀴즈 🎶")
+st.write("춤 설명을 보고 어떤 K-POP 곡인지 맞혀보세요!")
+
 # 세션 상태 초기화
-if "q_idx" not in st.session_state:
-    st.session_state.q_idx = 0
-if "score" not in st.session_state:
-    st.session_state.score = 0
+if "current_quiz" not in st.session_state:
+    st.session_state.current_quiz = random.choice(quiz_data)
+if "answered" not in st.session_state:
+    st.session_state.answered = False
 if "show_hint" not in st.session_state:
     st.session_state.show_hint = False
 
-def normalize(text: str) -> str:
-    """소문자 + 공백 제거"""
-    return text.strip().lower().replace(" ", "")
-
-# 현재 문제 불러오기
-q = questions[st.session_state.q_idx]
-
-st.subheader(f"문제 {st.session_state.q_idx + 1}")
-st.write(q["desc"])
+# 현재 문제 표시
+st.subheader("문제 ❓")
+st.write(st.session_state.current_quiz["question"])
 
 # 힌트 버튼
-if st.button("힌트 보기 🕵️"):
+if st.button("힌트 보기 🔎"):
     st.session_state.show_hint = True
 
+# 힌트 표시 (가수 이름)
 if st.session_state.show_hint:
-    st.info(f"👉 가수 힌트: **{q['artist']}**")
+    st.info(f"👉 힌트: 이 곡의 아티스트는 **{st.session_state.current_quiz['artist']}** 입니다.")
 
 # 사용자 입력
-user_answer = st.text_input("정답을 입력하세요:", key=f"answer_{st.session_state.q_idx}")
+user_answer = st.text_input("정답을 입력하세요:", "")
 
 # 제출 버튼
 if st.button("제출"):
-    user_norm = normalize(user_answer)
-    correct = any(user_norm == normalize(ans) for ans in q["answers"])
+    if user_answer.strip():
+        if user_answer.strip().lower() == st.session_state.current_quiz["answer"].lower():
+            st.success("🎉 정답입니다!")
+        else:
+            st.error(f"❌ 오답! 정답은 **{st.session_state.current_quiz['answer']}** 입니다.")
 
-    if correct:
-        st.success(f"✅ 정답입니다! 정답은 {', '.join(q['answers'])} 입니다.")
-        st.session_state.score += 1
-    else:
-        st.error(f"❌ 오답! 정답은 {', '.join(q['answers'])} 입니다.")
+        # 뮤직비디오 보여주기
+        st.video(st.session_state.current_quiz["youtube_url"])
 
-    # 다음 문제로 즉시 이동
-    if st.session_state.q_idx < len(questions) - 1:
-        st.session_state.q_idx += 1
+        st.session_state.answered = True
+
+# 다음 문제 버튼
+if st.session_state.answered:
+    if st.button("다음 문제"):
+        st.session_state.current_quiz = random.choice(quiz_data)
+        st.session_state.answered = False
         st.session_state.show_hint = False
-        st.rerun()
-    else:
-        st.balloons()
-        st.write(f"🎊 퀴즈 완료! 최종 점수: {st.session_state.score}/{len(questions)}")
